@@ -120,6 +120,7 @@ class Welcome(commands.Cog):
             value=(
                 f"📣 {notice} 채널을 읽어주세요.\n"
                 f"✅ {rule} 채널을 확인해주세요.\n\n"
+                "학번 역할은 문의하기로 요청해주세요 ex) 26"
                 
             ),
             inline=False
