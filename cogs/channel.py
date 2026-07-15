@@ -5,7 +5,7 @@ INSTALL_DATA = [
     {
         "category": "🤖 | 봇 기능",
         "channels": [
-            ("text", "🎧ㅣ채널생성")
+            ("text", "🎧ㅣ채널생성"),
             ("text", "📨ㅣ문의하기")
         ]
     },
@@ -20,7 +20,7 @@ INSTALL_DATA = [
         "category": "🎙️ | 음성 채널",
         "channels": [
             ("voice", "🛏️ | Sleep"),
-            ("voice", "☕ | Cafe")
+            ("voice", "☕ | Cafe"),
             ("voice", "➕ | 채널 생성")
         ]
     }
