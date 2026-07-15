@@ -62,7 +62,9 @@ class InquiryModal(disnake.ui.Modal):
             inline=False,
         )
 
-        embed.set_thumbnail(url=inter.author.display_avatar.url)
+        embed.set_thumbnail(
+            url=inter.author.display_avatar.url
+        )
 
         await manage_channel.send(embed=embed)
 
@@ -81,7 +83,7 @@ class InquiryView(disnake.ui.View):
         super().__init__(timeout=None)
 
     @disnake.ui.button(
-        label="📨 문의하기",
+        label="문의하기",
         style=disnake.ButtonStyle.primary,
         custom_id="inquiry_button",
         emoji="📨"
@@ -91,7 +93,9 @@ class InquiryView(disnake.ui.View):
         button: disnake.ui.Button,
         inter: disnake.MessageInteraction,
     ):
-        await inter.response.send_modal(InquiryModal())
+        await inter.response.send_modal(
+            InquiryModal()
+        )
 
 
 # ===========================
@@ -101,8 +105,10 @@ class Inquiry(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.ready = False
 
-        # 버튼 영구 유지
+    async def cog_load(self):
+        # Persistent View 등록 (한 번만)
         self.bot.add_view(InquiryView())
 
     # ---------------------------
@@ -110,6 +116,12 @@ class Inquiry(commands.Cog):
     # ---------------------------
     @commands.Cog.listener()
     async def on_ready(self):
+
+        # 재접속 시 중복 실행 방지
+        if self.ready:
+            return
+
+        self.ready = True
 
         channel = disnake.utils.get(
             self.bot.get_all_channels(),
@@ -121,7 +133,7 @@ class Inquiry(commands.Cog):
             return
 
         # 이미 안내 임베드가 있는지 확인
-        async for message in channel.history(limit=20):
+        async for message in channel.history(limit=None):
 
             if (
                 message.author == self.bot.user
@@ -130,7 +142,7 @@ class Inquiry(commands.Cog):
             ):
                 print("[문의] 안내 임베드가 이미 존재합니다.")
                 return
-
+        
         embed = disnake.Embed(
             title="📨 문의센터",
             description=(
@@ -141,7 +153,9 @@ class Inquiry(commands.Cog):
             color=disnake.Color.green(),
         )
 
-        embed.set_footer(text="문의는 신중하게 작성해주세요.")
+        embed.set_footer(
+            text="문의는 신중하게 작성해주세요."
+        )
 
         await channel.send(
             embed=embed,
@@ -176,7 +190,6 @@ class Inquiry(commands.Cog):
             view=InquiryView(),
             ephemeral=True,
         )
-
 
 def setup(bot):
     bot.add_cog(Inquiry(bot))
